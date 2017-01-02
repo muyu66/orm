@@ -1,0 +1,30 @@
+{
+    "name": "muyu/orm",
+    "description": "A lightweight orm framework based on laravel",
+    "type": "library",
+    "require": {
+        "php": ">=5.5.9"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^5.7",
+        "laravel/framework": "5.1.*"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Zhou Yu",
+            "email": "muyu.zhouyu@outlook.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Orm\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "TestCase\\": "tests/"
+        }
+    },
+    "minimum-stability": "stable"
+}
