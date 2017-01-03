@@ -2,7 +2,6 @@
 
 namespace TestCase;
 
-use Illuminate\Support\Collection;
 use Orm\Models\User;
 
 class ModelsTest extends TestCase
@@ -11,7 +10,7 @@ class ModelsTest extends TestCase
     {
         $models = new User();
         $models = $models->get();
-        $this->assertInstanceOf(Collection::class, $models);
+        $this->assertTrue(is_array($models));
     }
 
     public function testWhere()
@@ -25,7 +24,7 @@ class ModelsTest extends TestCase
     {
         $model = new User();
         $model = $model->where('id', 1)->first();
-        $this->assertEquals($model['id'], 1);
+        $this->assertEquals($model->id, 1);
     }
 
     public function testFirstOrFail()
@@ -34,5 +33,22 @@ class ModelsTest extends TestCase
         $this->assertException(function () use ($model) {
             return $model->where('id', 11)->firstOrFail();
         }, 404);
+    }
+
+    public function testSave()
+    {
+        // 单个数据 save
+        $model = new User();
+        $model = $model->where('id', 1)->first();
+        $model->test = rand(1, 1000000);
+        $this->assertEquals(1, $model->save());
+
+        // 多个数据 save
+        $models = new User();
+        $models = $models->get();
+        foreach ($models as $model) {
+            $model->test = rand(1, 100000);
+            $this->assertEquals(1, $model->save());
+        }
     }
 }
