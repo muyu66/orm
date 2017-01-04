@@ -2,10 +2,7 @@
 
 namespace Orm\Controllers;
 
-use Orm\Commons\Row;
-use Orm\Exceptions\NotFoundException;
-use Illuminate\Support\Collection;
-use stdClass;
+use Orm\Controllers\Connections\Connection;
 
 class Model
 {
@@ -24,155 +21,33 @@ class Model
     public $primary_key = 'id';
 
     /**
-     * 数据库驱动
+     * 分发之后的驱动
      *
-     * @var
+     * @var null|Queries\Db|Queries\Redis
      */
-    protected $driver;
-
-    private $db;
-    private $query;
+    private $driver;
 
     public function __construct()
     {
         $config = getConfig();
-        $this->setDriver($config['driver']);
-        $this->db = $this->getDriver($config);
-        $this->query = $this->getDb()->table($this->table);
-    }
 
-    private function setDriver($driver)
-    {
-        $this->driver = $driver;
+        $driver = new Connection();
+
+        $this->driver = $driver->dispatch($config, $this->table, $this->primary_key);
     }
 
     /**
-     * @description
+     * @description 分发驱动的方法, 比如 get(), update()
+     * @param $method
      * @param $params
-     * @return Db|Redis
+     * @return string
      * @author Zhou Yu
      */
-    private function getDriver($params)
+    public function __call($method, $params)
     {
-        $class = 'Orm\\Controllers\\' . $this->driver;
-        return new $class($params);
-    }
-
-    private function getDb()
-    {
-        return $this->db;
-    }
-
-    /**
-     * @description
-     * @param $array
-     * @return Collection|Row|array
-     * @author Zhou Yu
-     */
-    private function collect($array)
-    {
-        if ($array instanceof Collection) {
-            return $array;
+        if ($this->driver) {
+            return $this->driver->$method($params);
         }
-
-        if ($array instanceof stdClass) {
-            return $this->save($array);
-        }
-
-        if (is_array($array)) {
-            foreach ($array as &$item) {
-                $this->save($item);
-            }
-            return $array;
-        }
-
-        return new Collection($array);
-    }
-
-    /**
-     * @description
-     * @param $item
-     * @return Row
-     * @author Zhou Yu
-     */
-    private function save(&$item)
-    {
-        $item = new Row($item);
-        $item->save = function () use ($item) {
-            $item = array_del((array) $item, 'save');
-
-            $models = $this->getNewThis();
-            $primary_key = $models->primary_key;
-
-            return $models->where($primary_key, $item[$primary_key])
-                ->update(array_del($item, $primary_key));
-        };
-        return $item;
-    }
-
-    /**
-     * @description
-     * @return $this
-     * @author Zhou Yu
-     */
-    private function getNewThis()
-    {
-        return new $this;
-    }
-
-    /**
-     * @description
-     * @return array|Collection|Row
-     * @author Zhou Yu
-     */
-    public function get()
-    {
-        $data = $this->query->get();
-        return $this->collect($data);
-    }
-
-    /**
-     * @description
-     * @return Collection|Row
-     * @author Zhou Yu
-     */
-    public function first()
-    {
-        $data = $this->query->first();
-        return $this->collect($data);
-    }
-
-    public function firstOrFail()
-    {
-        $data = $this->query->first();
-        if (is_null($data)) {
-            throw new NotFoundException();
-        }
-        return $this->collect($data);
-    }
-
-    /**
-     * @description
-     * @param $column
-     * @param null $operator
-     * @param null $value
-     * @return $this
-     * @author Zhou Yu
-     */
-    public function where($column, $operator = null, $value = null)
-    {
-        $this->query = $this->query->where($column, $operator, $value);
-        return $this;
-    }
-
-    /**
-     * @description
-     * @param $array
-     * @return int 所影响行数
-     * @author Zhou Yu
-     */
-    public function update($array)
-    {
-        return $this->query->update($array);
+        return 'not found this method';
     }
 }

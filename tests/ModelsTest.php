@@ -10,7 +10,7 @@ class ModelsTest extends TestCase
     {
         $models = new User();
         $models = $models->get();
-        $this->assertTrue(is_array($models));
+        $this->assertTrue(is_array($models) && ! empty($models));
     }
 
     public function testWhere()

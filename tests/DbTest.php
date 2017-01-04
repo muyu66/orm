@@ -2,7 +2,7 @@
 
 namespace TestCase;
 
-use Orm\Controllers\Db;
+use Orm\Controllers\Drivers\Db;
 use Illuminate\Database\Query\Builder;
 
 class DbTest extends TestCase

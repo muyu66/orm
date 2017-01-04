@@ -3,7 +3,7 @@
 function getConfig()
 {
     return [
-        'driver' => 'Db',
+        'driver' => 'db',
         'host' => '127.0.0.1',
         'database' => 'test',
         'user' => 'root',

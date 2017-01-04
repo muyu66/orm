@@ -1,42 +1,41 @@
 <?php
 
-namespace Orm\Controllers;
+namespace Orm\Controllers\Drivers;
 
 use Illuminate\Database\MySqlConnection;
 use PDO;
 
-class Db extends Connection
+class Db extends Driver
 {
     private $pdo;
-    private $db;
 
     public function __construct($params)
     {
         $this->setPdo(
             $params['host'], $params['database'], $params['user'], $params['password']
         );
-        $this->setDb(new MySqlConnection($this->pdo));
+        $this->setConnection(new MySqlConnection($this->getPdo()));
     }
 
     /**
      * @return MySqlConnection
      */
-    public function getDb()
+    public function getConnection()
     {
-        return $this->db;
+        return $this->connection;
     }
 
-    protected function setDb(MySqlConnection $db)
+    public function setConnection($connection)
     {
-        $this->db = $db;
+        $this->connection = $connection;
     }
 
-    public function getPdo()
+    private function getPdo()
     {
         return $this->pdo;
     }
 
-    protected function setPdo()
+    private function setPdo()
     {
         list($host, $database, $user, $password) = func_get_args();
         $this->pdo = new PDO("mysql:host=$host;dbname=$database", $user, $password);
@@ -44,6 +43,6 @@ class Db extends Connection
 
     public function table($table)
     {
-        return $this->getDb()->table($table);
+        return $this->getConnection()->table($table);
     }
 }

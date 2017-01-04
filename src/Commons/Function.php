@@ -19,3 +19,12 @@ function array_del($arr, $keys)
 
     return $arr;
 }
+
+function array_fill_to($array, $num)
+{
+    while (count($array) < $num) {
+        $array[] = null;
+    }
+
+    return $array;
+}
