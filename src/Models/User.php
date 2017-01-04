@@ -2,9 +2,9 @@
 
 namespace Orm\Models;
 
-use Orm\Controllers\ModelController;
+use Orm\Controllers\Model;
 
-class User extends ModelController
+class User extends Model
 {
     protected $table = 'users';
 }

@@ -5,10 +5,9 @@ namespace Orm\Controllers;
 use Orm\Commons\Row;
 use Orm\Exceptions\NotFoundException;
 use Illuminate\Support\Collection;
-use Orm\Models\User;
 use stdClass;
 
-class ModelController
+class Model
 {
     /**
      * 表名
@@ -24,13 +23,39 @@ class ModelController
      */
     public $primary_key = 'id';
 
+    /**
+     * 数据库驱动
+     *
+     * @var
+     */
+    protected $driver;
+
     private $db;
     private $query;
 
     public function __construct()
     {
-        $this->db = new DbController('127.0.0.1', 'test', 'root', '19931124');
+        $config = getConfig();
+        $this->setDriver($config['driver']);
+        $this->db = $this->getDriver($config);
         $this->query = $this->getDb()->table($this->table);
+    }
+
+    private function setDriver($driver)
+    {
+        $this->driver = $driver;
+    }
+
+    /**
+     * @description
+     * @param $params
+     * @return Db|Redis
+     * @author Zhou Yu
+     */
+    private function getDriver($params)
+    {
+        $class = 'Orm\\Controllers\\' . $this->driver;
+        return new $class($params);
     }
 
     private function getDb()
@@ -76,7 +101,7 @@ class ModelController
         $item->save = function () use ($item) {
             $item = array_del((array) $item, 'save');
 
-            $models = new $this;
+            $models = $this->getNewThis();
             $primary_key = $models->primary_key;
 
             return $models->where($primary_key, $item[$primary_key])
@@ -87,7 +112,17 @@ class ModelController
 
     /**
      * @description
-     * @return Collection|Row
+     * @return $this
+     * @author Zhou Yu
+     */
+    private function getNewThis()
+    {
+        return new $this;
+    }
+
+    /**
+     * @description
+     * @return array|Collection|Row
      * @author Zhou Yu
      */
     public function get()

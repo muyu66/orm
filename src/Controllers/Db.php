@@ -5,15 +5,16 @@ namespace Orm\Controllers;
 use Illuminate\Database\MySqlConnection;
 use PDO;
 
-class DbController
+class Db extends Connection
 {
     private $pdo;
     private $db;
 
-    public function __construct()
+    public function __construct($params)
     {
-        list($host, $database, $user, $password) = func_get_args();
-        $this->setPdo($host, $database, $user, $password);
+        $this->setPdo(
+            $params['host'], $params['database'], $params['user'], $params['password']
+        );
         $this->setDb(new MySqlConnection($this->pdo));
     }
 
