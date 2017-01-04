@@ -10,7 +10,7 @@ class Connection
     public function dispatch($config, $table, $primary_key)
     {
         switch ($config['driver']) {
-            case 'db':
+            case 'mysql':
                 Db::$config = $config;
                 Db::$table = $table;
                 Db::$primary_key = $primary_key;

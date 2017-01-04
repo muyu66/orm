@@ -2,6 +2,8 @@
 
 namespace Orm\Controllers\Queries;
 
+use Orm\Controllers\Model;
+
 interface QueryInterface
 {
     public function get();
@@ -13,4 +15,6 @@ interface QueryInterface
     public function where($params);
 
     public function update($array);
+
+    public function with($target, $foreign_key, $local_key);
 }

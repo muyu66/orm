@@ -9,13 +9,7 @@ class DbTest extends TestCase
 {
     public function testTable()
     {
-        $ctl = new Db([
-            'driver' => 'Db',
-            'host' => '127.0.0.1',
-            'database' => 'test',
-            'user' => 'root',
-            'password' => '19931124'
-        ]);
+        $ctl = new Db(get_config_test());
         $instance = $ctl->table('users');
         $this->assertInstanceOf(Builder::class, $instance);
     }

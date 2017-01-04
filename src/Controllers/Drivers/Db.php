@@ -12,7 +12,7 @@ class Db extends Driver
     public function __construct($params)
     {
         $this->setPdo(
-            $params['host'], $params['database'], $params['user'], $params['password']
+            $params['host'], $params['database'], $params['username'], $params['password']
         );
         $this->setConnection(new MySqlConnection($this->getPdo()));
     }

@@ -3,6 +3,7 @@
 namespace Orm\Controllers\Queries;
 
 use Orm\Commons\Row;
+use Orm\Controllers\Model;
 use Orm\Exceptions\NotFoundException;
 use Illuminate\Support\Collection;
 use stdClass;
@@ -92,6 +93,16 @@ class Db implements QueryInterface
     public function update($array)
     {
         return $this->query->update($array);
+    }
+
+    public function with($target, $foreign_key, $local_key)
+    {
+        $s_table = static::$table;
+
+        $t_table = new $target();
+        $t_table = $t_table->table;
+
+        return $this->query->join($t_table, "$s_table.$local_key", '=', "$t_table.$foreign_key");
     }
 
     /**

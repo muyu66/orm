@@ -1,12 +1,12 @@
 <?php
 
-function getConfig()
+function get_config_test()
 {
     return [
-        'driver' => 'db',
+        'driver' => 'mysql',
         'host' => '127.0.0.1',
         'database' => 'test',
-        'user' => 'root',
+        'username' => 'root',
         'password' => '19931124',
     ];
 }

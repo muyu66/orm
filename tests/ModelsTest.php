@@ -51,4 +51,11 @@ class ModelsTest extends TestCase
             $this->assertEquals(1, $model->save());
         }
     }
+
+    public function testWith()
+    {
+        $model = new User();
+        $result = $model->user2()->get();
+        $this->assertEquals(3, count($result));
+    }
 }
