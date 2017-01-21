@@ -2,23 +2,22 @@
 
 namespace Orm\Controllers\Connections;
 
-use Orm\Controllers\Queries\Db;
-use Orm\Controllers\Queries\Redis;
+use Orm\Controllers\Queries\RedisQuery;
+use Predis\Client;
 
 class Connection
 {
-    public function dispatch($config, $table, $primary_key)
+    private static $instance = null;
+
+    public static function create($instance)
     {
-        switch ($config['driver']) {
-            case 'mysql':
-                Db::$config = $config;
-                Db::$table = $table;
-                Db::$primary_key = $primary_key;
-                return new Db();
-            case 'redis':
-                return new Redis();
-            default:
-                return null;
+        if ($instance instanceof Client) {
+            self::$instance = new RedisQuery($instance);
         }
+    }
+
+    public static function get()
+    {
+        return self::$instance;
     }
 }

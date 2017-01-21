@@ -56,6 +56,6 @@ class ModelsTest extends TestCase
     {
         $model = new User();
         $result = $model->user2()->get();
-        $this->assertEquals(3, count($result));
+        $this->assertEquals(1, count($result));
     }
 }

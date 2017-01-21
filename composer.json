@@ -1,13 +1,14 @@
 {
     "name": "muyu/orm",
-    "description": "A lightweight orm framework based on laravel",
+    "description": "A lightweight, high-performance ORM framework",
     "type": "library",
     "require": {
         "php": ">=5.5.9",
-        "laravel/framework": "5.1.*"
+        "predis/predis": "^1.1"
     },
     "require-dev": {
-        "phpunit/phpunit": "^5.7"
+        "phpunit/phpunit": "~5.7",
+        "symfony/var-dumper": "^3.2"
     },
     "license": "MIT",
     "authors": [

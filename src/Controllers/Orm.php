@@ -3,8 +3,9 @@
 namespace Orm\Controllers;
 
 use Orm\Controllers\Connections\Connection;
+use Orm\Controllers\Queries\RedisQuery;
 
-class Model
+class Orm
 {
     /**
      * 表名
@@ -28,30 +29,26 @@ class Model
     public $foreign_key;
 
     /**
-     * 分发之后的驱动
+     * 获取驱动实例
      *
-     * @var null|Queries\Db|Queries\Redis
+     * @var RedisQuery|null
      */
     private $driver;
 
     public function __construct()
     {
-        $config = get_config();
-
-        $driver = new Connection();
-
-        $this->driver = $driver->dispatch($config, $this->table, $this->primary_key);
+        $this->driver = Connection::get();
 
         $this->foreign_key = strtolower(get_class_name(static::class)) . '_id';
     }
 
-    public function hasMany($class, $foreign_key = null, $local_key = null)
-    {
-        $foreign_key = $foreign_key ? : $this->foreign_key;
-        $local_key = $local_key ? : $this->primary_key;
-
-        return $this->driver->with($class, $foreign_key, $local_key);
-    }
+//    public function hasMany($class, $foreign_key = null, $local_key = null)
+//    {
+//        $foreign_key = $foreign_key ? : $this->foreign_key;
+//        $local_key = $local_key ? : $this->primary_key;
+//
+//        return $this->driver->with($class, $foreign_key, $local_key);
+//    }
 
     /**
      * @description 分发驱动的方法, 比如 get(), update()
@@ -62,6 +59,8 @@ class Model
      */
     public function __call($method, $params)
     {
+        $params['this'] = $this;
+
         if ($this->driver) {
             return $this->driver->$method($params);
         }

@@ -2,7 +2,17 @@
 
 namespace Orm\Controllers\Drivers;
 
-abstract class Driver implements DriverInterface
+class Driver implements DriverInterface
 {
     protected $connection;
+
+    public function setConnection($connection)
+    {
+        $this->connection = $connection;
+    }
+
+    public function getConnection()
+    {
+        return $this->connection;
+    }
 }
