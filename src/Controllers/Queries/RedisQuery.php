@@ -5,7 +5,7 @@ namespace Orm\Controllers\Queries;
 use Orm\Controllers\Drivers\RedisDriver;
 use Predis\Client;
 
-class RedisQuery
+class RedisQuery implements QueryInterface
 {
     /**
      * 底层驱动实例
@@ -54,14 +54,6 @@ class RedisQuery
     }
 
     public function find($params)
-    {
-        $this->table_name = $params['this']->table;
-
-        return $this->sFind($params[0]);
-    }
-
-    //todo
-    public function where($params)
     {
         $this->table_name = $params['this']->table;
 

@@ -2,19 +2,15 @@
 
 namespace Orm\Controllers\Queries;
 
-use Orm\Controllers\Model;
-
 interface QueryInterface
 {
-    public function get();
+    public function getTableName();
 
-    public function first();
+    public function setTableName($table_name);
 
-    public function firstOrFail();
+    public function get($params);
 
-    public function where($params);
+    public function find($params);
 
-    public function update($array);
-
-    public function with($target, $foreign_key, $local_key);
+    public function save($params);
 }

@@ -28,10 +28,7 @@
     "autoload-dev": {
         "psr-4": {
             "TestCase\\": "tests/"
-        },
-        "files": [
-            "config.php"
-        ]
+        }
     },
     "minimum-stability": "stable"
 }

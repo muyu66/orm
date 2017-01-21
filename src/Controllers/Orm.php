@@ -42,14 +42,6 @@ class Orm
         $this->foreign_key = strtolower(get_class_name(static::class)) . '_id';
     }
 
-//    public function hasMany($class, $foreign_key = null, $local_key = null)
-//    {
-//        $foreign_key = $foreign_key ? : $this->foreign_key;
-//        $local_key = $local_key ? : $this->primary_key;
-//
-//        return $this->driver->with($class, $foreign_key, $local_key);
-//    }
-
     /**
      * @description 分发驱动的方法, 比如 get(), update()
      * @param $method
