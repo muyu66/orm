@@ -53,6 +53,11 @@ class RedisQuery implements QueryInterface
         return $rows;
     }
 
+    public function sMaxIndex()
+    {
+        return max($this->db->smembers($this->table_name) ? : [0]);
+    }
+
     public function find($params)
     {
         $this->table_name = $params['this']->table;
@@ -69,7 +74,7 @@ class RedisQuery implements QueryInterface
     {
         $this->table_name = $params['this']->table;
 
-        $tmps = [];
+        $tmps = ['id' => $this->sMaxIndex() + 1];
         foreach ($params['this'] as $k => $v) {
             if (in_array($k, ['table', 'primary_key', 'foreign_key', 'driver'])) {
                 continue;

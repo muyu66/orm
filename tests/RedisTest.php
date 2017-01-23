@@ -28,7 +28,6 @@ class RedisTest extends TestCase
     public function testSave()
     {
         $model = new User();
-        $model->id = 1;
         $model->name = 'aaa';
         $model->save();
     }
