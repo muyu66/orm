@@ -20,7 +20,7 @@ class RedisTest extends TestCase
 
         $redis->flushdb();
 
-        new Connection($redis);
+        Connection::create($redis);
 
         $this->testSave();
     }
