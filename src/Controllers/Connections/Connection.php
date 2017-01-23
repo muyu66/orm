@@ -9,7 +9,7 @@ class Connection
 {
     private static $instance = null;
 
-    public static function create($instance)
+    public function __construct($instance)
     {
         if ($instance instanceof Client) {
             self::$instance = new RedisQuery($instance);
